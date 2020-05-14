@@ -31,7 +31,7 @@ const fieldRules = ({ type, required, minLength }) => {
   ].filter(rule => rule);
 };
 
-class DynamicForm extends React.Component {
+export default class DynamicForm extends React.Component {
   static propTypes = {
     id: PropTypes.string,
     fields: PropTypes.arrayOf(Field),
@@ -317,4 +317,4 @@ class DynamicForm extends React.Component {
   }
 }
 
-export default Form.create()(DynamicForm);
+//export default Form.create()(DynamicForm);

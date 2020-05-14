@@ -1,5 +1,5 @@
 import { isEqual, map, find } from "lodash";
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useEffect, useRef, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import getQueryResultData from "@/lib/getQueryResultData";
 import ErrorBoundary, { ErrorMessage } from "@/components/ErrorBoundary";
@@ -25,11 +25,39 @@ function combineFilters(localFilters, globalFilters) {
   });
 }
 
+function useDimensions(targetRef) {
+  const getDimensions = () => {
+    return {
+      width: targetRef.current ? targetRef.current.offsetWidth : 0,
+      height: targetRef.current ? targetRef.current.offsetHeight : 0
+    };
+  };
+
+  const [dimensions, setDimensions] = useState(getDimensions);
+
+  const handleResize = () => {
+    setDimensions(getDimensions());
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useLayoutEffect(() => {
+    handleResize();
+  }, []);
+  return dimensions;
+}
+
 export default function VisualizationRenderer(props) {
   const data = useMemo(() => getQueryResultData(props.queryResult), [props.queryResult]);
   const [filters, setFilters] = useState(data.filters);
   const filtersRef = useRef();
   filtersRef.current = filters;
+
+  const targetRef = useRef();
+  const size = useDimensions(targetRef);
 
   const lastOptions = useRef();
   const errorHandlerRef = useRef();
@@ -79,17 +107,21 @@ export default function VisualizationRenderer(props) {
     }
   }, [props.visualization.options, data]);
 
+
   return (
     <div className="visualization-renderer">
       <ErrorBoundary
         ref={errorHandlerRef}
         renderError={() => <ErrorMessage>Error while rendering visualization.</ErrorMessage>}>
         {showFilters && <Filters filters={filters} onChange={setFilters} />}
-        <div className="visualization-renderer-wrapper">
+        <div ref={targetRef} className="visualization-renderer-wrapper">
+          <p>{size.width}</p>
+          <p>{size.height}</p>
           <Renderer
             key={`visualization${visualization.id}`}
             options={options}
             data={filteredData}
+            size={size}
             visualizationName={visualization.name}
           />
         </div>

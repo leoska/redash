@@ -43,6 +43,7 @@ import useUpdateQueryDescription from "./hooks/useUpdateQueryDescription";
 import useUnsavedChangesAlert from "./hooks/useUnsavedChangesAlert";
 
 import "./QuerySource.less";
+import { Tabs, Table, Divider, Tag } from "antd";
 
 function chooseDataSourceId(dataSourceIds, availableDataSources) {
   dataSourceIds = map(dataSourceIds, v => parseInt(v, 10));
@@ -180,232 +181,323 @@ function QuerySource(props) {
   const editVisualization = useEditVisualizationDialog(query, queryResult, newQuery => setQuery(newQuery));
   const deleteVisualization = useDeleteVisualization(query, setQuery);
 
+  // return (
+  //   <div className={cx("query-page-wrapper", { "query-fixed-layout": !isMobile })}>
+  //     <QuerySourceAlerts query={query} dataSourcesAvailable={!dataSourcesLoaded || dataSources.length > 0} />
+  //     <div className="container p-b-10">
+  //       <QueryPageHeader
+  //         query={query}
+  //         dataSource={dataSource}
+  //         sourceMode
+  //         selectedVisualization={selectedVisualization}
+  //         onChange={setQuery}
+  //       />
+  //     </div>
+  //     <main className="query-fullscreen">
+  //       <Resizable direction="horizontal" sizeAttribute="flex-basis" toggleShortcut="Alt+Shift+D, Alt+D">
+  //         <nav>
+  //           {dataSourcesLoaded && (
+  //             <div className="editor__left__data-source">
+  //               <Select
+  //                 className="w-100"
+  //                 data-test="SelectDataSource"
+  //                 placeholder="Choose data source..."
+  //                 value={dataSource ? dataSource.id : undefined}
+  //                 disabled={!queryFlags.canEdit || !dataSourcesLoaded || dataSources.length === 0}
+  //                 loading={!dataSourcesLoaded}
+  //                 optionFilterProp="data-name"
+  //                 showSearch
+  //                 onChange={handleDataSourceChange}>
+  //                 {map(dataSources, ds => (
+  //                   <Select.Option
+  //                     key={`ds-${ds.id}`}
+  //                     value={ds.id}
+  //                     data-name={ds.name}
+  //                     data-test={`SelectDataSource${ds.id}`}>
+  //                     <img src={`/static/images/db-logos/${ds.type}.png`} width="20" alt={ds.name} />
+  //                     <span>{ds.name}</span>
+  //                   </Select.Option>
+  //                 ))}
+  //               </Select>
+  //             </div>
+  //           )}
+  //           <div className="editor__left__schema">
+  //             <SchemaBrowser
+  //               schema={schema}
+  //               onRefresh={() => refreshSchema(true)}
+  //               onItemSelect={handleSchemaItemSelect}
+  //             />
+  //           </div>
+  //
+  //           {!query.isNew() && (
+  //             <div className="query-page-query-description">
+  //               <EditInPlace
+  //                 isEditable={queryFlags.canEdit}
+  //                 markdown
+  //                 ignoreBlanks={false}
+  //                 placeholder="Add description"
+  //                 value={query.description}
+  //                 onDone={updateQueryDescription}
+  //                 multiline
+  //               />
+  //             </div>
+  //           )}
+  //
+  //           {!query.isNew() && <QueryMetadata layout="table" query={query} onEditSchedule={editSchedule} />}
+  //         </nav>
+  //       </Resizable>
+  //
+  //       <div className="content">
+  //         <div className="flex-fill p-relative">
+  //           <div
+  //             className="p-absolute d-flex flex-column p-l-15 p-r-15"
+  //             style={{ left: 0, top: 0, right: 0, bottom: 0, overflow: "auto" }}>
+  //             <Resizable direction="vertical" sizeAttribute="flex-basis">
+  //               <div className="row editor">
+  //                 <section className="query-editor-wrapper" data-test="QueryEditor">
+  //                   <QueryEditor
+  //                     ref={editorRef}
+  //                     data-executing={isQueryExecuting ? "true" : null}
+  //                     syntax={dataSource ? dataSource.syntax : null}
+  //                     value={query.query}
+  //                     schema={schema}
+  //                     autocompleteEnabled={autocompleteAvailable && autocompleteEnabled}
+  //                     onChange={handleQueryEditorChange}
+  //                     onSelectionChange={setSelectedText}
+  //                   />
+  //
+  //                   <QueryEditor.Controls
+  //                     addParameterButtonProps={{
+  //                       title: "Add New Parameter",
+  //                       shortcut: "mod+p",
+  //                       onClick: openAddNewParameterDialog,
+  //                     }}
+  //                     formatButtonProps={{
+  //                       title: "Format Query",
+  //                       shortcut: "mod+shift+f",
+  //                       onClick: formatQuery,
+  //                     }}
+  //                     saveButtonProps={
+  //                       queryFlags.canEdit && {
+  //                         text: (
+  //                           <React.Fragment>
+  //                             <span className="hidden-xs">Save</span>
+  //                             {isDirty && !isQuerySaving ? "*" : null}
+  //                           </React.Fragment>
+  //                         ),
+  //                         shortcut: "mod+s",
+  //                         onClick: doSaveQuery,
+  //                         loading: isQuerySaving,
+  //                       }
+  //                     }
+  //                     executeButtonProps={{
+  //                       disabled: !queryFlags.canExecute || isQueryExecuting || areParametersDirty,
+  //                       shortcut: "mod+enter, alt+enter",
+  //                       onClick: doExecuteQuery,
+  //                       text: (
+  //                         <span className="hidden-xs">{selectedText === null ? "Execute" : "Execute Selected"}</span>
+  //                       ),
+  //                     }}
+  //                     autocompleteToggleProps={{
+  //                       available: autocompleteAvailable,
+  //                       enabled: autocompleteEnabled,
+  //                       onToggle: toggleAutocomplete,
+  //                     }}
+  //                     dataSourceSelectorProps={
+  //                       dataSource
+  //                         ? {
+  //                             disabled: !queryFlags.canEdit,
+  //                             value: dataSource.id,
+  //                             onChange: handleDataSourceChange,
+  //                             options: map(dataSources, ds => ({ value: ds.id, label: ds.name })),
+  //                           }
+  //                         : false
+  //                     }
+  //                   />
+  //                 </section>
+  //               </div>
+  //             </Resizable>
+  //
+  //             {!queryFlags.isNew && <QueryMetadata layout="horizontal" query={query} onEditSchedule={editSchedule} />}
+  //
+  //             <section className="query-results-wrapper">
+  //               {query.hasParameters() && (
+  //                 <div className="query-parameters-wrapper">
+  //                   <Parameters
+  //                     editable={queryFlags.canEdit}
+  //                     disableUrlUpdate={queryFlags.isNew}
+  //                     parameters={parameters}
+  //                     onPendingValuesChange={() => updateParametersDirtyFlag()}
+  //                     onValuesChange={() => {
+  //                       updateParametersDirtyFlag(false);
+  //                       doExecuteQuery(true);
+  //                     }}
+  //                     onParametersEdit={() => {
+  //                       // save if query clean
+  //                       // https://discuss.redash.io/t/query-unsaved-changes-indication/3302/5
+  //                       if (!isDirty) {
+  //                         saveQuery();
+  //                       }
+  //                     }}
+  //                   />
+  //                 </div>
+  //               )}
+  //               {(executionError || isQueryExecuting) && (
+  //                 <div className="query-alerts">
+  //                   <QueryExecutionStatus
+  //                     status={executionStatus}
+  //                     updatedAt={updatedAt}
+  //                     error={executionError}
+  //                     isCancelling={isExecutionCancelling}
+  //                     onCancel={cancelExecution}
+  //                   />
+  //                 </div>
+  //               )}
+  //
+  //               <React.Fragment>
+  //                 {queryResultData.log.length > 0 && (
+  //                   <div className="query-results-log">
+  //                     <p>Log Information:</p>
+  //                     {map(queryResultData.log, (line, index) => (
+  //                       <p key={`log-line-${index}`} className="query-log-line">
+  //                         {line}
+  //                       </p>
+  //                     ))}
+  //                   </div>
+  //                 )}
+  //                 {loadedInitialResults && !(queryFlags.isNew && !queryResult) && (
+  //                   <QueryVisualizationTabs
+  //                     queryResult={queryResult}
+  //                     visualizations={query.visualizations}
+  //                     showNewVisualizationButton={queryFlags.canEdit && queryResultData.status === ExecutionStatus.DONE}
+  //                     canDeleteVisualizations={queryFlags.canEdit}
+  //                     selectedTab={selectedVisualization}
+  //                     onChangeTab={setSelectedVisualization}
+  //                     onAddVisualization={addVisualization}
+  //                     onDeleteVisualization={deleteVisualization}
+  //                     refreshButton={
+  //                       <Button
+  //                         type="primary"
+  //                         disabled={!queryFlags.canExecute || areParametersDirty}
+  //                         loading={isQueryExecuting}
+  //                         onClick={doExecuteQuery}>
+  //                         {!isQueryExecuting && <i className="zmdi zmdi-refresh m-r-5" aria-hidden="true" />}
+  //                         Refresh Now
+  //                       </Button>
+  //                     }
+  //                   />
+  //                 )}
+  //               </React.Fragment>
+  //             </section>
+  //           </div>
+  //         </div>
+  //         {queryResult && !queryResult.getError() && (
+  //           <div className="bottom-controller-container">
+  //             <QueryExecutionMetadata
+  //               query={query}
+  //               queryResult={queryResult}
+  //               selectedVisualization={selectedVisualization}
+  //               isQueryExecuting={isQueryExecuting}
+  //               showEditVisualizationButton={!queryFlags.isNew && queryFlags.canEdit}
+  //               onEditVisualization={editVisualization}
+  //             />
+  //           </div>
+  //         )}
+  //       </div>
+  //     </main>
+  //   </div>
+  // );
+
+  const columns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      render: text => <a>{text}</a>
+    },
+    {
+      title: "Age",
+      dataIndex: "age",
+      key: "age"
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
+      key: "address"
+    },
+    {
+      title: "Tags",
+      key: "tags",
+      dataIndex: "tags",
+      render: tags => (
+        <span>
+        {tags.map(tag => {
+          let color = tag.length > 5 ? "geekblue" : "green";
+          if (tag === "loser") {
+            color = "volcano";
+          }
+          return (
+            <Tag color={color} key={tag}>
+              {tag.toUpperCase()}
+            </Tag>
+          );
+        })}
+      </span>
+      )
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (text, record) => (
+        <span>
+        <a>Invite {record.name}</a>
+        <Divider type="vertical" />
+        <a>Delete</a>
+      </span>
+      )
+    }
+  ];
+
+  const data = [
+    {
+      key: "1",
+      name: "John Brown",
+      age: 32,
+      address: "New York No. 1 Lake Park",
+      tags: ["nice", "developer"]
+    },
+    {
+      key: "2",
+      name: "Jim Green",
+      age: 42,
+      address: "London No. 1 Lake Park",
+      tags: ["loser"]
+    },
+    {
+      key: "3",
+      name: "Joe Black",
+      age: 32,
+      address: "Sidney No. 1 Lake Park",
+      tags: ["cool", "teacher"]
+    }
+  ];
+
+  for (let i = 4; i < 101; ++i)
+    data.push({
+      key: `${i}`,
+      name: "Joe Black",
+      age: 32,
+      address: "Sidney No. 1 Lake Park",
+      tags: ["cool", "teacher"]
+    });
+
+  columns[0].fixed = true;
+
   return (
     <div className={cx("query-page-wrapper", { "query-fixed-layout": !isMobile })}>
-      <QuerySourceAlerts query={query} dataSourcesAvailable={!dataSourcesLoaded || dataSources.length > 0} />
-      <div className="container p-b-10">
-        <QueryPageHeader
-          query={query}
-          dataSource={dataSource}
-          sourceMode
-          selectedVisualization={selectedVisualization}
-          onChange={setQuery}
-        />
-      </div>
-      <main className="query-fullscreen">
-        <Resizable direction="horizontal" sizeAttribute="flex-basis" toggleShortcut="Alt+Shift+D, Alt+D">
-          <nav>
-            {dataSourcesLoaded && (
-              <div className="editor__left__data-source">
-                <Select
-                  className="w-100"
-                  data-test="SelectDataSource"
-                  placeholder="Choose data source..."
-                  value={dataSource ? dataSource.id : undefined}
-                  disabled={!queryFlags.canEdit || !dataSourcesLoaded || dataSources.length === 0}
-                  loading={!dataSourcesLoaded}
-                  optionFilterProp="data-name"
-                  showSearch
-                  onChange={handleDataSourceChange}>
-                  {map(dataSources, ds => (
-                    <Select.Option
-                      key={`ds-${ds.id}`}
-                      value={ds.id}
-                      data-name={ds.name}
-                      data-test={`SelectDataSource${ds.id}`}>
-                      <img src={`/static/images/db-logos/${ds.type}.png`} width="20" alt={ds.name} />
-                      <span>{ds.name}</span>
-                    </Select.Option>
-                  ))}
-                </Select>
-              </div>
-            )}
-            <div className="editor__left__schema">
-              <SchemaBrowser
-                schema={schema}
-                onRefresh={() => refreshSchema(true)}
-                onItemSelect={handleSchemaItemSelect}
-              />
-            </div>
-
-            {!query.isNew() && (
-              <div className="query-page-query-description">
-                <EditInPlace
-                  isEditable={queryFlags.canEdit}
-                  markdown
-                  ignoreBlanks={false}
-                  placeholder="Add description"
-                  value={query.description}
-                  onDone={updateQueryDescription}
-                  multiline
-                />
-              </div>
-            )}
-
-            {!query.isNew() && <QueryMetadata layout="table" query={query} onEditSchedule={editSchedule} />}
-          </nav>
-        </Resizable>
-
-        <div className="content">
-          <div className="flex-fill p-relative">
-            <div
-              className="p-absolute d-flex flex-column p-l-15 p-r-15"
-              style={{ left: 0, top: 0, right: 0, bottom: 0, overflow: "auto" }}>
-              <Resizable direction="vertical" sizeAttribute="flex-basis">
-                <div className="row editor">
-                  <section className="query-editor-wrapper" data-test="QueryEditor">
-                    <QueryEditor
-                      ref={editorRef}
-                      data-executing={isQueryExecuting ? "true" : null}
-                      syntax={dataSource ? dataSource.syntax : null}
-                      value={query.query}
-                      schema={schema}
-                      autocompleteEnabled={autocompleteAvailable && autocompleteEnabled}
-                      onChange={handleQueryEditorChange}
-                      onSelectionChange={setSelectedText}
-                    />
-
-                    <QueryEditor.Controls
-                      addParameterButtonProps={{
-                        title: "Add New Parameter",
-                        shortcut: "mod+p",
-                        onClick: openAddNewParameterDialog,
-                      }}
-                      formatButtonProps={{
-                        title: "Format Query",
-                        shortcut: "mod+shift+f",
-                        onClick: formatQuery,
-                      }}
-                      saveButtonProps={
-                        queryFlags.canEdit && {
-                          text: (
-                            <React.Fragment>
-                              <span className="hidden-xs">Save</span>
-                              {isDirty && !isQuerySaving ? "*" : null}
-                            </React.Fragment>
-                          ),
-                          shortcut: "mod+s",
-                          onClick: doSaveQuery,
-                          loading: isQuerySaving,
-                        }
-                      }
-                      executeButtonProps={{
-                        disabled: !queryFlags.canExecute || isQueryExecuting || areParametersDirty,
-                        shortcut: "mod+enter, alt+enter",
-                        onClick: doExecuteQuery,
-                        text: (
-                          <span className="hidden-xs">{selectedText === null ? "Execute" : "Execute Selected"}</span>
-                        ),
-                      }}
-                      autocompleteToggleProps={{
-                        available: autocompleteAvailable,
-                        enabled: autocompleteEnabled,
-                        onToggle: toggleAutocomplete,
-                      }}
-                      dataSourceSelectorProps={
-                        dataSource
-                          ? {
-                              disabled: !queryFlags.canEdit,
-                              value: dataSource.id,
-                              onChange: handleDataSourceChange,
-                              options: map(dataSources, ds => ({ value: ds.id, label: ds.name })),
-                            }
-                          : false
-                      }
-                    />
-                  </section>
-                </div>
-              </Resizable>
-
-              {!queryFlags.isNew && <QueryMetadata layout="horizontal" query={query} onEditSchedule={editSchedule} />}
-
-              <section className="query-results-wrapper">
-                {query.hasParameters() && (
-                  <div className="query-parameters-wrapper">
-                    <Parameters
-                      editable={queryFlags.canEdit}
-                      disableUrlUpdate={queryFlags.isNew}
-                      parameters={parameters}
-                      onPendingValuesChange={() => updateParametersDirtyFlag()}
-                      onValuesChange={() => {
-                        updateParametersDirtyFlag(false);
-                        doExecuteQuery(true);
-                      }}
-                      onParametersEdit={() => {
-                        // save if query clean
-                        // https://discuss.redash.io/t/query-unsaved-changes-indication/3302/5
-                        if (!isDirty) {
-                          saveQuery();
-                        }
-                      }}
-                    />
-                  </div>
-                )}
-                {(executionError || isQueryExecuting) && (
-                  <div className="query-alerts">
-                    <QueryExecutionStatus
-                      status={executionStatus}
-                      updatedAt={updatedAt}
-                      error={executionError}
-                      isCancelling={isExecutionCancelling}
-                      onCancel={cancelExecution}
-                    />
-                  </div>
-                )}
-
-                <React.Fragment>
-                  {queryResultData.log.length > 0 && (
-                    <div className="query-results-log">
-                      <p>Log Information:</p>
-                      {map(queryResultData.log, (line, index) => (
-                        <p key={`log-line-${index}`} className="query-log-line">
-                          {line}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                  {loadedInitialResults && !(queryFlags.isNew && !queryResult) && (
-                    <QueryVisualizationTabs
-                      queryResult={queryResult}
-                      visualizations={query.visualizations}
-                      showNewVisualizationButton={queryFlags.canEdit && queryResultData.status === ExecutionStatus.DONE}
-                      canDeleteVisualizations={queryFlags.canEdit}
-                      selectedTab={selectedVisualization}
-                      onChangeTab={setSelectedVisualization}
-                      onAddVisualization={addVisualization}
-                      onDeleteVisualization={deleteVisualization}
-                      refreshButton={
-                        <Button
-                          type="primary"
-                          disabled={!queryFlags.canExecute || areParametersDirty}
-                          loading={isQueryExecuting}
-                          onClick={doExecuteQuery}>
-                          {!isQueryExecuting && <i className="zmdi zmdi-refresh m-r-5" aria-hidden="true" />}
-                          Refresh Now
-                        </Button>
-                      }
-                    />
-                  )}
-                </React.Fragment>
-              </section>
-            </div>
-          </div>
-          {queryResult && !queryResult.getError() && (
-            <div className="bottom-controller-container">
-              <QueryExecutionMetadata
-                query={query}
-                queryResult={queryResult}
-                selectedVisualization={selectedVisualization}
-                isQueryExecuting={isQueryExecuting}
-                showEditVisualizationButton={!queryFlags.isNew && queryFlags.canEdit}
-                onEditVisualization={editVisualization}
-              />
-            </div>
-          )}
-        </div>
-      </main>
+      <Table columns={columns} dataSource={data} scroll={{ x: 500, y: 500 }} />
     </div>
-  );
+  )
 }
 
 QuerySource.propTypes = {

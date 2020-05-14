@@ -97,7 +97,7 @@ export function prepareColumns(columns, searchInput, orderBy, onOrderByChange) {
     const Component = initColumn(column);
     result.render = (unused, row) => ({
       children: <Component row={row.record} />,
-      props: { className: `display-as-${column.displayAs}` },
+      props: { className: `display-as-${column.displayAs} ` }, //ant-table-scroll display-as-invisible
     });
 
     return result;
