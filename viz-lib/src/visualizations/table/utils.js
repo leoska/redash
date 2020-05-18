@@ -1,7 +1,8 @@
 import { isNil, map, filter, each, sortBy, some, findIndex, toString } from "lodash";
 import React from "react";
 import cx from "classnames";
-import Icon from "antd/lib/icon";
+//import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 import Tooltip from "antd/lib/tooltip";
 import ColumnTypes from "./columns";
 
@@ -57,6 +58,11 @@ export function prepareColumns(columns, searchInput, orderBy, onOrderByChange) {
     const isDescend = orderByInfo[column.name] && orderByInfo[column.name].direction === "descend";
 
     const sortColumnIndex = isMultiColumnSort && orderByInfo[column.name] ? orderByInfo[column.name].index : null;
+
+    console.log({
+      isAscend,
+      isDescend,
+    });
 
     const result = {
       key: column.name,

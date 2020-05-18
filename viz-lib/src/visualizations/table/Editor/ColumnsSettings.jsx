@@ -1,7 +1,8 @@
 import { map } from "lodash";
 import React from "react";
 import Collapse from "antd/lib/collapse";
-import Icon from "antd/lib/icon";
+// import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 import Tooltip from "antd/lib/tooltip";
 import Typography from "antd/lib/typography";
 import { sortableElement } from "react-sortable-hoc";

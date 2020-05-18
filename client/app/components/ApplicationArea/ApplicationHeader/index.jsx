@@ -4,7 +4,8 @@ import React, { useCallback, useRef } from "react";
 
 import Dropdown from "antd/lib/dropdown";
 import Button from "antd/lib/button";
-import Icon from "antd/lib/icon";
+//import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 import Menu from "antd/lib/menu";
 import Input from "antd/lib/input";
 import Tooltip from "antd/lib/tooltip";

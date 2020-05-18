@@ -3,7 +3,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
 import Radio from "antd/lib/radio";
-import Icon from "antd/lib/icon";
+// import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 import Tooltip from "antd/lib/tooltip";
 
 import "./index.less";

@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import { isEmpty, template } from "lodash";
 
 import Dropdown from "antd/lib/dropdown";
-import Icon from "antd/lib/icon";
+//import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 import Menu from "antd/lib/menu";
 
 import HelpTrigger from "@/components/HelpTrigger";

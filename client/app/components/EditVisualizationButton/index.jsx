@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Button from "antd/lib/button";
-import Icon from "antd/lib/icon";
+//import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 
 export default function EditVisualizationButton(props) {
   return (

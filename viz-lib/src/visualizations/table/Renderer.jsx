@@ -2,7 +2,8 @@ import { filter, map, get, initial, last, reduce } from "lodash";
 import React, { useMemo, useState, useRef, useCallback, useEffect } from "react";
 import Table from "antd/lib/table";
 import Input from "antd/lib/input";
-import Icon from "antd/lib/icon";
+// import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 import Popover from "antd/lib/popover";
 import { RendererPropTypes } from "@/visualizations/prop-types";
 
@@ -113,128 +114,25 @@ export default function Renderer({ options, data, size, context }) {
     return null;
   }
 
-  // При слишком маленькой ширине - таблица начинает склеивать столбцы
-  const maxWidth = 1200;
-  const maxHeight = 400;
-
-  const width = Math.max(size.width, maxWidth);
-  const height = Math.max(size.height - 100, maxHeight); // -100 - пока временная мера против 2-ого вертикального скролла
-
-  const columns = [
-    {
-      title: "Name11212323132132",
-      dataIndex: "name",
-      key: "name",
-      render: text => <a>{text}</a>
-    },
-    {
-      title: "Ageqw qw  qw  qw  qw  qw",
-      dataIndex: "age",
-      key: "age"
-    },
-    {
-      title: "Addresdasdasdasdadasdas",
-      dataIndex: "address",
-      key: "address"
-    },
-    {
-      title: "Tags",
-      key: "tags",
-      dataIndex: "tags",
-      render: tags => (
-        <span>
-        {tags.map(tag => {
-          let color = tag.length > 5 ? "geekblue" : "green";
-          if (tag === "loser") {
-            color = "volcano";
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </span>
-      )
-    },
-    {
-      title: "Action",
-      key: "action",
-      render: (text, record) => (
-        <span>
-        <a>Invite {record.name}</a>
-        <Divider type="vertical" />
-        <a>Delete</a>
-      </span>
-      )
-    }
-  ];
-
-  const data2 = [
-    {
-      key: "1",
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: ["nice", "developer"]
-    },
-    {
-      key: "2",
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      tags: ["loser"]
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      age: 32,
-      address: "Sidney No. 1 Lake Park",
-      tags: ["cool", "teacher"]
-    }
-  ];
-
-  for (let i = 4; i < 101; ++i)
-    data2.push({
-      key: `${i}`,
-      name: "Joe Black",
-      age: 32213123,
-      address: "Sidney No. 1 Lake Park",
-      tags: ["cool", "teacher"]
-    });
-
-  columns[0].fixed = true;
-  columns[1].fixed = true;
-
   tableColumns[0].fixed = true;
   tableColumns[1].fixed = true;
 
-  // return (
-  //   <div className="table-visualization-container">
-  //     <Table
-  //       data-percy="show-scrollbars"
-  //       data-test="TableVisualization"
-  //       columns={tableColumns}
-  //       dataSource={preparedRows}
-  //       scroll={{ x: width, y: height }}
-  //       pagination={{
-  //         size: get(options, "paginationSize", ""),
-  //         position: "bottom",
-  //         pageSize: options.itemsPerPage,
-  //         hideOnSinglePage: true,
-  //       }}
-  //     />
-  //   </div>
-  // );
+  // При слишком маленькой ширине - таблица начинает склеивать столбцы
+  const maxWidth = 1200;
+  const maxHeight = 500;
+  const sizeWidth = size && size.width ? size.width : 0;
+  const sizeHeight = size && size.height ? size.height : 0;
+  const width = Math.max(sizeWidth, maxWidth);
+  const height = Math.max(sizeHeight, maxHeight); // -100 - пока временная мера против 2-ого вертикального скролла
 
   return (
     <div className="table-visualization-container">
       <Table
-        columns={columns}
-        dataSource={data2}
-        // data-percy="show-scrollbars"
-        // data-test="TableVisualization"
-        scroll={{ x: 500, y: 500 }}
+        data-percy="show-scrollbars"
+        data-test="TableVisualization"
+        columns={tableColumns}
+        dataSource={preparedRows}
+        scroll={{ x: width, y: height }}
         pagination={{
           size: get(options, "paginationSize", ""),
           position: "bottom",

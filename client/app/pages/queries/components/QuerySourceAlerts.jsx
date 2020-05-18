@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Card from "antd/lib/card";
-import Icon from "antd/lib/icon";
+//import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 import Button from "antd/lib/button";
 import Typography from "antd/lib/typography";
 import { currentUser } from "@/services/auth";

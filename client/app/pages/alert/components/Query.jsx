@@ -6,7 +6,8 @@ import SchedulePhrase from "@/components/queries/SchedulePhrase";
 import { Query as QueryType } from "@/components/proptypes";
 
 import Tooltip from "antd/lib/tooltip";
-import Icon from "antd/lib/icon";
+// import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 
 import "./Query.less";
 

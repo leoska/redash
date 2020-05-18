@@ -5,7 +5,8 @@ import cx from "classnames";
 import Popover from "antd/lib/popover";
 import Card from "antd/lib/card";
 import Tooltip from "antd/lib/tooltip";
-import Icon from "antd/lib/icon";
+// import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 import chooseTextColorForBackground from "@/lib/chooseTextColorForBackground";
 
 import ColorInput from "./Input";

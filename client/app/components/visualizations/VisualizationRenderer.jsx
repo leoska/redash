@@ -1,5 +1,5 @@
 import { map, find } from "lodash";
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useEffect, useRef, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
 import getQueryResultData from "@/lib/getQueryResultData";
 import Filters, { FiltersType, filterData } from "@/components/Filters";
@@ -24,11 +24,39 @@ function combineFilters(localFilters, globalFilters) {
   });
 }
 
+function useDimensions(targetRef) {
+  const getDimensions = () => {
+    return {
+      width: targetRef.current ? targetRef.current.offsetWidth : 0,
+      height: targetRef.current ? targetRef.current.offsetHeight : 0
+    };
+  };
+
+  const [dimensions, setDimensions] = useState(getDimensions);
+
+  const handleResize = () => {
+    setDimensions(getDimensions());
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useLayoutEffect(() => {
+    handleResize();
+  }, []);
+  return dimensions;
+}
+
 export default function VisualizationRenderer(props) {
   const data = useMemo(() => getQueryResultData(props.queryResult), [props.queryResult]);
   const [filters, setFilters] = useState(data.filters);
   const filtersRef = useRef();
   filtersRef.current = filters;
+
+  const targetRef = useRef();
+  const size = useDimensions(targetRef);
 
   // Reset local filters when query results updated
   useEffect(() => {
@@ -60,14 +88,17 @@ export default function VisualizationRenderer(props) {
   }
 
   return (
-    <Renderer
-      key={`visualization${visualization.id}`}
-      type={visualization.type}
-      options={options}
-      data={filteredData}
-      visualizationName={visualization.name}
-      addonBefore={showFilters && <Filters filters={filters} onChange={setFilters} />}
-    />
+    <div ref={targetRef} className="visualization-renderer-wrapper">
+      <Renderer
+        key={`visualization${visualization.id}`}
+        type={visualization.type}
+        options={options}
+        data={filteredData}
+        size={size || {}}
+        visualizationName={visualization.name}
+        addonBefore={showFilters && <Filters filters={filters} onChange={setFilters} />}
+      />
+    </div>
   );
 }
 

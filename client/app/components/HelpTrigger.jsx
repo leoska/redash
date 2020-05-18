@@ -4,7 +4,8 @@ import PropTypes from "prop-types";
 import cx from "classnames";
 import Tooltip from "antd/lib/tooltip";
 import Drawer from "antd/lib/drawer";
-import Icon from "antd/lib/icon";
+// import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 import BigMessage from "@/components/BigMessage";
 import DynamicComponent from "@/components/DynamicComponent";
 

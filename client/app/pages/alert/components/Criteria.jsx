@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import { head, includes, toString, isEmpty } from "lodash";
 
 import Input from "antd/lib/input";
-import Icon from "antd/lib/icon";
+// import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 import Select from "antd/lib/select";
 import Divider from "antd/lib/divider";
 

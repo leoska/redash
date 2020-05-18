@@ -6,7 +6,8 @@ import Modal from "antd/lib/modal";
 import Dropdown from "antd/lib/dropdown";
 import Menu from "antd/lib/menu";
 import Button from "antd/lib/button";
-import Icon from "antd/lib/icon";
+// import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 
 export default function MenuButton({ doDelete, canEdit, mute, unmute, muted }) {
   const [loading, setLoading] = useState(false);

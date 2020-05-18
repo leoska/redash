@@ -1,6 +1,7 @@
 import React from "react";
 import Input from "antd/lib/input";
-import Icon from "antd/lib/icon";
+// import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 import Tooltip from "antd/lib/tooltip";
 
 export default class InputWithCopy extends React.Component {

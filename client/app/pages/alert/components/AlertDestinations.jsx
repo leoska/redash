@@ -12,7 +12,8 @@ import notification from "@/services/notification";
 import ListItemAddon from "@/components/groups/ListItemAddon";
 import EmailSettingsWarning from "@/components/EmailSettingsWarning";
 
-import Icon from "antd/lib/icon";
+// import Icon from "antd/lib/icon";
+import { Icon } from '@ant-design/compatible';
 import Tooltip from "antd/lib/tooltip";
 import Switch from "antd/lib/switch";
 import Button from "antd/lib/button";
