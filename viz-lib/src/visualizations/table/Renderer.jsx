@@ -79,16 +79,18 @@ export default function Renderer({ options, data, size, context }) {
   const onSearchInputChange = useCallback(event => setSearchTerm(event.target.value), [setSearchTerm]);
 
   const tableColumns = useMemo(() => {
-    const searchInput =
-      searchColumns.length > 0 ? (
-        <SearchInput ref={searchInputRef} searchColumns={searchColumns} onChange={onSearchInputChange} />
-      ) : null;
-    return prepareColumns(options.columns, searchInput, orderBy, newOrderBy => {
+    return prepareColumns(options.columns, orderBy, newOrderBy => {
       setOrderBy(newOrderBy);
       // Remove text selection - may occur accidentally
       document.getSelection().removeAllRanges();
     });
   }, [options.columns, searchColumns, searchInputRef, onSearchInputChange, orderBy, setOrderBy]);
+
+  const searchInput = useMemo(() => {
+    return searchColumns.length > 0 ? (
+      <SearchInput ref={searchInputRef} searchColumns={searchColumns} onChange={onSearchInputChange} />
+    ) : null;
+  }, [searchColumns, searchInputRef, onSearchInputChange]);
 
   const preparedRows = useMemo(() => sortRows(filterRows(initRows(data.rows), searchTerm, searchColumns), orderBy), [
     data.rows,
@@ -127,12 +129,13 @@ export default function Renderer({ options, data, size, context }) {
 
   return (
     <div className="table-visualization-container">
+      {searchInput}
       <Table
         data-percy="show-scrollbars"
         data-test="TableVisualization"
         columns={tableColumns}
         dataSource={preparedRows}
-        // scroll={{ x: width, y: height }}
+        scroll={{ x: width, y: height }}
         pagination={{
           size: get(options, "paginationSize", ""),
           position: "bottom",

@@ -5,6 +5,7 @@ import Checkbox from "antd/lib/checkbox";
 
 import RedashColorPicker from "@/components/ColorPicker";
 import RedashTextAlignmentSelect from "@/components/TextAlignmentSelect";
+import RedashFixedAlignmentSelect from "@/components/FixedAlignmentSelect";
 
 import withControlLabel, { ControlLabel } from "./withControlLabel";
 import createTabbedEditor from "./createTabbedEditor";
@@ -19,3 +20,4 @@ export const Input = withControlLabel(AntInput);
 export const InputNumber = withControlLabel(AntInputNumber);
 export const ColorPicker = withControlLabel(RedashColorPicker);
 export const TextAlignmentSelect = withControlLabel(RedashTextAlignmentSelect);
+export const FixedAlignmentSelect = withControlLabel(RedashFixedAlignmentSelect);

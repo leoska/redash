@@ -3,7 +3,7 @@ import React from "react";
 import { useDebouncedCallback } from "use-debounce";
 import PropTypes from "prop-types";
 import * as Grid from "antd/lib/grid";
-import { Section, Select, Input, Checkbox, TextAlignmentSelect } from "@/components/visualizations/editor";
+import { Section, Select, Input, Checkbox, TextAlignmentSelect, FixedAlignmentSelect } from "@/components/visualizations/editor";
 
 import ColumnTypes from "../columns";
 
@@ -44,6 +44,15 @@ export default function ColumnEditor({ column, onChange }) {
           onChange={event => handleChange({ allowSearch: event.target.checked })}>
           Use for search
         </Checkbox>
+      </Section>
+
+      <Section>
+        <span>Stick column: </span>
+        <FixedAlignmentSelect
+          data-test={`Table.Column.${column.name}.FixedAlignment`}
+          defaultValue={column.fixedAlign}
+          onChange={event => handleChange({ fixedAlign: event.target.value })}
+        />
       </Section>
 
       <Section>
