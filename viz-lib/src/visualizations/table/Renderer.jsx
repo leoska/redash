@@ -105,7 +105,7 @@ export default function Renderer({ options, data, size, context }) {
     // so let's use this "hack" for better performance.
     if (searchInputRef.current) {
       // pass value and fake event-like object
-      searchInputRef.current.input.setValue("", { target: { value: "" } });
+      searchInputRef.current.input.setValue(""); //{ target: { value: "" } }
     }
     setOrderBy([]);
   }, [options.columns, data.columns, searchInputRef]);
@@ -118,7 +118,7 @@ export default function Renderer({ options, data, size, context }) {
   tableColumns[1].fixed = true;
 
   // При слишком маленькой ширине - таблица начинает склеивать столбцы
-  const maxWidth = 1200;
+  const maxWidth = 1600;
   const maxHeight = 500;
   const sizeWidth = size && size.width ? size.width : 0;
   const sizeHeight = size && size.height ? size.height : 0;
@@ -132,7 +132,7 @@ export default function Renderer({ options, data, size, context }) {
         data-test="TableVisualization"
         columns={tableColumns}
         dataSource={preparedRows}
-        scroll={{ x: width, y: height }}
+        // scroll={{ x: width, y: height }}
         pagination={{
           size: get(options, "paginationSize", ""),
           position: "bottom",

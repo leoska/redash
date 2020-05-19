@@ -88,7 +88,8 @@ export default function VisualizationRenderer(props) {
   }
 
   return (
-    <div ref={targetRef} className="visualization-renderer-wrapper">
+    // className="visualization-renderer-wrapper"
+    <div ref={targetRef}>
       <Renderer
         key={`visualization${visualization.id}`}
         type={visualization.type}

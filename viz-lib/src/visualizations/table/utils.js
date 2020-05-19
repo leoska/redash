@@ -62,6 +62,7 @@ export function prepareColumns(columns, searchInput, orderBy, onOrderByChange) {
     console.log({
       isAscend,
       isDescend,
+      name: JSON.stringify(column.name),
     });
 
     const result = {
